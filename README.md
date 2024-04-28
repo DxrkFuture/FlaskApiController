@@ -14,32 +14,46 @@ This is a web application for easy monitoring of system load, including:
 
 Download the project via Git
 
-```git clone https://github.com/DxrkFuture/FlaskApiController.git```
+```
+git clone https://github.com/DxrkFuture/FlaskApiController.git
+```
 Navigate to the project folder
-```cd FlaskApiController```
+```
+cd FlaskApiController
+```
 Create a workspace
-```python -m venv .venv```
+```
+python -m venv .venv
+```
 After you have created an environment, you must activate it:
 
 - In Windows, you can do this by running (at the command line) the file
 
- ```.venv\Scripts\activate.bat.```
+ ```
+ .venv\Scripts\activate.bat
+ ```
 
 - In Linux/MacOS you need to run (again, in the terminal) the file using the source command:
 
-```source .venv/bin/activate```
+```
+source .venv/bin/activate
+```
 
 (!) The environment is deactivated every time the terminal (console, command line) is closed, so you must activate the environment every time you turn on the command line
 If for some reason you want to manually deactivate the environment without closing the terminal, it is enough to call the `deactivate` command
 
 # Install Python dependencies
 
-```pip install Flask psutil python-dotenv```
+```
+pip install Flask psutil python-dotenv
+```
 
 # Startup
 
 Then you can run the project with the command:
-```flask run```
+```
+flask run
+```
 
 Verify the deployment by navigating to your server address in
 your preferred browser.
