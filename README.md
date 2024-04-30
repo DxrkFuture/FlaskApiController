@@ -9,6 +9,7 @@ This is a web application for easy monitoring of system load, including:
 
 - Authorization to the system
 - View system statistics
+- Web Command line
 
 ## Installation
 
@@ -45,10 +46,20 @@ If for some reason you want to manually deactivate the environment without closi
 # Install Python dependencies
 
 ```
-pip install Flask psutil python-dotenv
+pip install Flask flask_socketio psutil python-dotenv gevent 
 ```
 
 # Startup
+Before starting the project, change the `.env.example` file to `.env`
+- In Windows
+```
+copy .env.example .env
+```
+- In Linux/MacOS
+```
+cp .env.example .env
+```
+After that, open the file and configure the users and secret key
 
 Then you can run the project with the command:
 ```

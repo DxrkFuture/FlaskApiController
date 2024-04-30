@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <style>
+      #output {
+        white-space: pre-wrap;
+        font-family: monospace;
+        height: 400px;
+        overflow-y: scroll;
+        padding: 10px;
+        background-color: #212529;
+        color: #fff;
+        border-radius: 4px;
+      }
+    </style>
 </head>
 <body data-bs-theme="dark">
 
@@ -34,11 +48,11 @@
 <div class="accordion accordion-flush" id="accordionFlushExample">
   <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSystemStatistics" aria-expanded="false" aria-controls="flush-collapseOne">
         System statistics
       </button>
     </h2>
-    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+    <div id="flush-collapseSystemStatistics" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
       <div class="accordion-body">
         <!--Spoiler open System statistics-->
         <p class="fs-4">CPU utilization</p>
@@ -61,9 +75,80 @@
         </div>
       </div>
     </div>
+    <!--Говнокод ON-->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseConsole" aria-expanded="false" aria-controls="flush-collapseOne">
+          Console
+        </button>
+      </h2>
+      <div id="flush-collapseConsole" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+        <div class="accordion-body">
+          <div class="container mt-4">
+            <div class="row">
+              <div class="col-30">
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    id="command-input"
+                    class="form-control"
+                    aria-describedby="button-command"
+                    placeholder="Enter command"
+                  />
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-outline-primary" id="button-command" onclick="executeCommand()">
+                      Execute
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" id="button-command" onclick="stopCommand()">
+                      Stop
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Output</h5>
+                  </div>
+                  <div class="card-body">
+                    <samp>
+                      <div id="output"></div>
+                    </samp>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--Говнокод OFF-->
   </div>
-</div>
+  
+  <!--Console JavaScript-->
+    <script>
+      var socket = io();
+      var outputElement = document.getElementById("output");
 
+      function executeCommand() {
+        var commandInput = document.getElementById("command-input");
+        var command = commandInput.value;
+        socket.emit("execute_command", command);
+        commandInput.value = "";
+      }
+
+      function stopCommand() {
+        socket.emit("stop_command");
+      }
+
+      socket.on("command_output", function (data) {
+        outputElement.textContent += data + "\n";
+        outputElement.scrollTop = outputElement.scrollHeight;
+      });
+    </script>
+
+<!--UpdateSystemStats-->
 <script>
   function updateSystemStats() {
     fetch('/api/sysstats', {
